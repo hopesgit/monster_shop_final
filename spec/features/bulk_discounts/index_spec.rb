@@ -30,5 +30,18 @@ describe "As a merchant employee" do
       click_link("Go to Bulk Discounts")
       expect(current_path).to eq("/merchant/merchants/#{@brian.id}/bulk_discounts")
     end
+
+    it "the index has these properties" do
+      visit merchant_path(@brian)
+      click_link("Go to Bulk Discounts")
+
+      expect(page).to have_link("New Bulk Discount")
+      expect(page).to have_content("Discounts")
+      expect(page).to have_content("You have no bulk discounts yet or all of them have been deleted.")
+      click_link("New Bulk Discount")
+
+      expect(current_path).to eq(new_merchant_merchant_bulk_discount_path(@brian))
+      expect(page).to have_content("New Bulk Discount")
+    end
   end
 end
