@@ -23,6 +23,16 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
     end
   end
 
+  def edit
+    @discount = BulkDiscount.find(params[:id])
+  end
+
+  def update
+    binding.pry
+    @discount = BulkDiscount.find(params[:id])
+    # @discount.update
+  end
+
   private
   def new_params
     params.require(:bulk_discount).permit(:item_quantity, :percentage)
