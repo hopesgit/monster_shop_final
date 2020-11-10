@@ -26,7 +26,7 @@ describe "As a merchant employee" do
       visit merchant_merchant_bulk_discounts_path(@brian)
 
       within("#bulk-discount-#{@bulk_discount_1.id}") do
-        expect(page).to have_content("Order #{@bulk_discount_1.item_quantity} of any item, get #{@bulk_discount_1.percentage} off!")
+        expect(page).to have_content("Order #{@bulk_discount_1.item_quantity} of any item, get #{@bulk_discount_1.percentage}% off!")
         expect(page).to have_link("Edit Discount")
         click_link("Edit Discount")
       end
@@ -36,6 +36,24 @@ describe "As a merchant employee" do
       expect(page).to have_content("Minimum Quantity")
       expect(page).to have_content("Percent off (ex: input 5 for 5% off)")
       expect(page).to have_button("Update Bulk discount")
+    end
+
+    it "filling out the edit form changes the discount details" do
+      visit merchant_merchant_bulk_discounts_path(@brian)
+
+      within("#bulk-discount-#{@bulk_discount_1.id}") do
+        expect(page).to have_content("Order #{@bulk_discount_1.item_quantity} of any item, get #{@bulk_discount_1.percentage}% off!")
+        expect(page).to have_link("Edit Discount")
+        click_link("Edit Discount")
+      end
+
+      fill_in "Minimum Quantity", with: 20
+      fill_in "Percent off (ex: input 5 for 5% off)", with: 10
+      click_button "Update Bulk discount"
+
+      within("#bulk-discount-#{@bulk_discount_1.id}") do
+        expect(page).to have_content("Order 20 of any item, get 10.0% off!")
+      end
     end
   end
 end

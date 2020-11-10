@@ -67,7 +67,7 @@ describe "As a merchant employee" do
       last_discount = BulkDiscount.last
 
       within("#bulk-discount-#{last_discount.id}") do
-        expect(page).to have_content("Order #{last_discount.item_quantity} of any item, get #{last_discount.percentage} off!")
+        expect(page).to have_content("Order #{last_discount.item_quantity} of any item, get #{last_discount.percentage}% off!")
       end
     end
 
@@ -81,7 +81,7 @@ describe "As a merchant employee" do
       last_discount = BulkDiscount.last
 
       within("#bulk-discount-#{last_discount.id}") do
-        expect(page).to have_content("Order #{last_discount.item_quantity} of any item, get #{last_discount.percentage} off!")
+        expect(page).to have_content("Order #{last_discount.item_quantity} of any item, get #{last_discount.percentage}% off!")
       end
 
       visit "/logout"
