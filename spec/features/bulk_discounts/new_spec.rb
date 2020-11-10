@@ -40,5 +40,15 @@ describe "As a merchant employee" do
       last_discount = BulkDiscount.last
       expect(last_discount.merchant_id).to eq(@brian.id)
     end
+
+    it "has a flash message for when the fields aren't filled out correctly" do
+      visit new_merchant_merchant_bulk_discount_path(@brian)
+
+      fill_in "Minimum Quantity", with: 5
+      fill_in "Percent off (ex: input 5 for 5% off)", with: "five percent"
+      click_button "Create Bulk discount"
+
+      expect(page).to have_content("Form not filled out completely.")
+    end
   end
 end
