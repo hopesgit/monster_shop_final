@@ -27,6 +27,8 @@ describe "As a merchant employee" do
     it "I see a link to access that merchant's discounts" do
       visit merchant_path(@brian)
       expect(page).to have_link("Go to Bulk Discounts")
+      click_link("Go to Bulk Discounts")
+      expect(current_path).to eq("/merchant/merchants/#{@brian.id}/bulk_discounts")
     end
   end
 end
