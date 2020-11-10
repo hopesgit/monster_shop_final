@@ -3,4 +3,7 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
     merchant = Merchant.find(current_user.merchant_id)
     @discounts = merchant.bulk_discounts
   end
+
+  def new
+  end
 end

@@ -1,1 +1,12 @@
 <h1>Discounts</h1>
+<br>
+<%= link_to "New Bulk Discount", new_merchant_merchant_bulk_discount_path(current_user.merchant_id) %>
+<br>
+<%= "You have no bulk discounts yet or all of them have been deleted." if @discounts.empty? %>
+<br>
+<% @discounts.each do |discount| %>
+  <section id="bulk-discount-<%= discount.id %>">
+    <p>Order <%= discount.item_quantity %> of any item, get <%= discount.percentage %> off!</p>
+    <p>------</p>
+  </section>
+<% end %>
