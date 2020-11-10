@@ -17,6 +17,15 @@ describe "As a merchant employee" do
       @megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
       @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3)
+      @user_4 = User.create(name: "Sarah",
+                            address: "1041 Circle Cir",
+                            city: "Denver",
+                            state: "CO",
+                            zip: 80012,
+                            email: "sarah@example.com",
+                            password: "Trade Seekrit",
+                            role: 1,
+                            merchant_id: @megan.id)
 
       visit "/login"
       fill_in :email, with: @user_2.email
@@ -48,7 +57,7 @@ describe "As a merchant employee" do
       visit merchant_merchant_bulk_discounts_path(@brian)
 
       expect(page).to have_content("You have no bulk discounts yet or all of them have been deleted.")
-      
+
       visit new_merchant_merchant_bulk_discount_path(@brian)
 
       fill_in "Minimum Quantity", with: 5
@@ -60,6 +69,31 @@ describe "As a merchant employee" do
       within("#bulk-discount-#{last_discount.id}") do
         expect(page).to have_content("Order #{last_discount.item_quantity} of any item, get #{last_discount.percentage} off!")
       end
+    end
+
+    it "doesn't change another merchant's discounts index when a discount is created" do
+      visit new_merchant_merchant_bulk_discount_path(@brian)
+
+      fill_in "Minimum Quantity", with: 5
+      fill_in "Percent off (ex: input 5 for 5% off)", with: 5
+      click_button "Create Bulk discount"
+
+      last_discount = BulkDiscount.last
+
+      within("#bulk-discount-#{last_discount.id}") do
+        expect(page).to have_content("Order #{last_discount.item_quantity} of any item, get #{last_discount.percentage} off!")
+      end
+
+      visit "/logout"
+      visit "/login"
+
+      fill_in :email, with: @user_4.email
+      fill_in :password, with: @user_4.password
+      click_button "Log In"
+
+      visit merchant_merchant_bulk_discounts_path(@megan)
+
+      expect(page).to have_content("You have no bulk discounts yet or all of them have been deleted.")
     end
   end
 end
