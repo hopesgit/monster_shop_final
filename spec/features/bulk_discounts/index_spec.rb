@@ -45,6 +45,10 @@ describe "As a merchant employee" do
     end
 
     it "the index shows discounts once they've been made" do
+      visit merchant_merchant_bulk_discounts_path(@brian)
+
+      expect(page).to have_content("You have no bulk discounts yet or all of them have been deleted.")
+      
       visit new_merchant_merchant_bulk_discount_path(@brian)
 
       fill_in "Minimum Quantity", with: 5
