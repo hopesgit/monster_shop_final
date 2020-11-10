@@ -10,7 +10,7 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
   end
 
   def create
-    discount = BulkDiscount.create!(
+    discount = BulkDiscount.new(
       item_quantity: new_params[:item_quantity],
       percentage: new_params[:percentage],
       merchant_id: current_user.merchant_id)
