@@ -11,8 +11,8 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
 
   def create
     discount = BulkDiscount.new(
-      item_quantity: new_params[:item_quantity],
-      percentage: new_params[:percentage],
+      item_quantity: discount_params[:item_quantity],
+      percentage: discount_params[:percentage],
       merchant_id: current_user.merchant_id)
     if discount.save
       flash[:success] = "Bulk discount created."
@@ -28,13 +28,18 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
   end
 
   def update
-    binding.pry
-    @discount = BulkDiscount.find(params[:id])
-    # @discount.update
+    discount = BulkDiscount.find(params[:id])
+    discount.update(discount_params)
+    if discount.save
+      flash[:success] = "Discount updated successfully."
+      redirect_to merchant_merchant_bulk_discounts_path
+    else
+      flash[:warning] = "Something went wrong."
+    end
   end
 
   private
-  def new_params
+  def discount_params
     params.require(:bulk_discount).permit(:item_quantity, :percentage)
   end
 end
