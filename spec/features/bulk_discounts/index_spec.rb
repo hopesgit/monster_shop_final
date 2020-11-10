@@ -43,5 +43,19 @@ describe "As a merchant employee" do
       expect(current_path).to eq(new_merchant_merchant_bulk_discount_path(@brian))
       expect(page).to have_content("New Bulk Discount")
     end
+
+    it "the index shows discounts once they've been made" do
+      visit new_merchant_merchant_bulk_discount_path(@brian)
+
+      fill_in "Minimum Quantity", with: 5
+      fill_in "Percent off (ex: input 5 for 5% off)", with: 5
+      click_button "Create Bulk discount"
+
+      last_discount = BulkDiscount.last
+
+      within("#bulk-discount-#{last_discount.id}") do
+        expect(page).to have_content("Order #{last_discount.item_quantity} of any item, get #{last_discount.percentage} off!")
+      end
+    end
   end
 end
