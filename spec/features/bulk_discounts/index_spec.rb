@@ -95,5 +95,29 @@ describe "As a merchant employee" do
 
       expect(page).to have_content("You have no bulk discounts yet or all of them have been deleted.")
     end
+
+    it "can have multiple discounts for one merchant" do
+      bulk_discount_1 = @brian.bulk_discounts.create(item_quantity: 10, percentage: 5)
+      bulk_discount_2 = @brian.bulk_discounts.create(item_quantity: 12, percentage: 10)
+      bulk_discount_3 = @brian.bulk_discounts.create(item_quantity: 17, percentage: 15)
+
+      visit merchant_merchant_bulk_discounts_path(@brian)
+
+      within "#bulk-discount-#{bulk_discount_1.id}" do
+        expect(page).to have_content("Order #{bulk_discount_1.item_quantity} of any item, get #{bulk_discount_1.percentage}% off!")
+        expect(page).to have_link("More Details")
+      end
+
+      within "#bulk-discount-#{bulk_discount_2.id}" do
+        expect(page).to have_content("Order #{bulk_discount_2.item_quantity} of any item, get #{bulk_discount_2.percentage}% off!")
+        expect(page).to have_link("More Details")
+      end
+
+      within "#bulk-discount-#{bulk_discount_3.id}" do
+        expect(page).to have_content("Order #{bulk_discount_3.item_quantity} of any item, get #{bulk_discount_3.percentage}% off!")
+        expect(page).to have_link("More Details")
+      end
+
+    end
   end
 end
