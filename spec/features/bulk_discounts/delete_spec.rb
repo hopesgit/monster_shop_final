@@ -23,13 +23,10 @@ describe "As a merchant employee" do
     end
 
     it "has an delete button that deletes the discount" do
-      visit merchant_merchant_bulk_discounts_path(@brian)
+      visit merchant_merchant_bulk_discount_path(@brian, @bulk_discount_1)
 
-      within("#bulk-discount-#{@bulk_discount_1.id}") do
-        expect(page).to have_content("Order #{@bulk_discount_1.item_quantity} of any item, get #{@bulk_discount_1.percentage}% off!")
-        expect(page).to have_button("Delete Discount")
-        click_button("Delete Discount")
-      end
+      expect(page).to have_button("Delete Discount")
+      click_button("Delete Discount")
 
       expect(current_path).to eq(merchant_merchant_bulk_discounts_path(@brian))
       expect(page).to have_content("Discount deleted successfully.")

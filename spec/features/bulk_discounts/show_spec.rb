@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe "As a merchant employee" do
-  describe "When I visit my employer's bulk discounts index page" do
+  describe "When I visit my employer's discounts index page" do
     before :each do
       @brian = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @user_2 = User.create!(name: "Alex",
@@ -22,32 +22,15 @@ describe "As a merchant employee" do
       click_button "Log In"
     end
 
-    it "has an edit link that brings me to a form" do
-      visit merchant_merchant_bulk_discount_path(@brian, @bulk_discount_1)
+    it "has a link to the discount's show page" do
+      visit merchant_merchant_bulk_discounts_path(@brian)
 
-      expect(page).to have_link("Edit Discount")
-      click_link("Edit Discount")
+      within("#bulk-discount-#{@bulk_discount_1.id}") do
+        expect(page).to have_link("More Details")
+        click_link("More Details")
+      end
 
-      expect(current_path).to eq(edit_merchant_merchant_bulk_discount_path(@brian, @bulk_discount_1))
-
-      expect(page).to have_content("Minimum Quantity")
-      expect(page).to have_content("Percent off (ex: input 5 for 5% off)")
-      expect(page).to have_button("Update Bulk discount")
-    end
-
-    it "filling out the edit form changes the discount details" do
-      visit merchant_merchant_bulk_discount_path(@brian, @bulk_discount_1)
-
-      click_link("Edit Discount")
-
-      fill_in "Minimum Quantity", with: 20
-      fill_in "Percent off (ex: input 5 for 5% off)", with: 10
-      click_button "Update Bulk discount"
       expect(current_path).to eq(merchant_merchant_bulk_discount_path(@brian, @bulk_discount_1))
-
-      expect(page).to have_content("Discount updated successfully.")
-      expect(page).to have_content("Minimum quantity of items: 20")
-      expect(page).to have_content("Percent discount: 10.0")
     end
   end
 end
