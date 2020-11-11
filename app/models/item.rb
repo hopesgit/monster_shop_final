@@ -29,4 +29,8 @@ class Item < ApplicationRecord
   def average_rating
     reviews.average(:rating)
   end
+
+  def most_applicable_bulk_discount(quantity)
+    self.merchant.bulk_discounts.order(percentage: :desc).where("item_quantity <= #{quantity}").first
+  end
 end

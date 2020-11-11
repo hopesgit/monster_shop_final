@@ -27,21 +27,23 @@ class Cart
   def grand_total
     grand_total = 0.0
     @contents.each do |item_id, quantity|
-      # grand_total += Item.find(item_id).price * quantity
       grand_total += discounted_subtotal(item_id, quantity)
     end
     grand_total
   end
 
   def discounted_subtotal(item_id, quantity)
+    quantity * discounted_price(item_id, quantity)
+  end
+
+  def discounted_price(item_id, quantity)
     item = Item.find(item_id)
-    discount = item.merchant.bulk_discounts.order(percentage: :desc).where("item_quantity <= #{quantity}").first
+    discount = item.most_applicable_bulk_discount(quantity)
     if discount.nil?
-      item.price * quantity
+      item.price
     else
       percentage = (100 - discount.percentage)/100
-      adjusted_price = item.price * percentage
-      adjusted_price * quantity
+      item.price * percentage
     end
   end
 
