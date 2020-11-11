@@ -117,7 +117,6 @@ describe "As a merchant employee" do
         expect(page).to have_content("Order #{bulk_discount_3.item_quantity} of any item, get #{bulk_discount_3.percentage}% off!")
         expect(page).to have_link("More Details")
       end
-
     end
   end
 end
