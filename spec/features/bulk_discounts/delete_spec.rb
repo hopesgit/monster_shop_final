@@ -22,40 +22,18 @@ describe "As a merchant employee" do
       click_button "Log In"
     end
 
-    it "has an edit link that brings me to a form" do
+    it "has an delete button that deletes the discount" do
       visit merchant_merchant_bulk_discounts_path(@brian)
 
       within("#bulk-discount-#{@bulk_discount_1.id}") do
         expect(page).to have_content("Order #{@bulk_discount_1.item_quantity} of any item, get #{@bulk_discount_1.percentage}% off!")
-        expect(page).to have_link("Edit Discount")
-        click_link("Edit Discount")
+        expect(page).to have_button("Delete Discount")
+        click_button("Delete Discount")
       end
 
-      expect(current_path).to eq(edit_merchant_merchant_bulk_discount_path(merchant_id: @bulk_discount_1.merchant_id, id: @bulk_discount_1.id))
-
-      expect(page).to have_content("Minimum Quantity")
-      expect(page).to have_content("Percent off (ex: input 5 for 5% off)")
-      expect(page).to have_button("Update Bulk discount")
-    end
-
-    it "filling out the edit form changes the discount details" do
-      visit merchant_merchant_bulk_discounts_path(@brian)
-
-      within("#bulk-discount-#{@bulk_discount_1.id}") do
-        expect(page).to have_content("Order #{@bulk_discount_1.item_quantity} of any item, get #{@bulk_discount_1.percentage}% off!")
-        expect(page).to have_link("Edit Discount")
-        click_link("Edit Discount")
-      end
-
-      fill_in "Minimum Quantity", with: 20
-      fill_in "Percent off (ex: input 5 for 5% off)", with: 10
-      click_button "Update Bulk discount"
-
-      expect(page).to have_content("Discount updated successfully.")
-
-      within("#bulk-discount-#{@bulk_discount_1.id}") do
-        expect(page).to have_content("Order 20 of any item, get 10.0% off!")
-      end
+      expect(current_path).to eq(merchant_merchant_bulk_discounts_path(@brian))
+      expect(page).to have_content("Discount deleted successfully.")
+      expect(page).to have_content("You have no bulk discounts yet or all of them have been deleted.")
     end
   end
 end
