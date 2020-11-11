@@ -23,6 +23,10 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
     end
   end
 
+  def show
+    @discount = BulkDiscount.find(params[:id])
+  end
+
   def edit
     @discount = BulkDiscount.find(params[:id])
   end
@@ -32,9 +36,7 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
     discount.update(discount_params)
     if discount.save
       flash[:success] = "Discount updated successfully."
-      redirect_to merchant_merchant_bulk_discounts_path
-    else
-      flash[:warning] = "Something went wrong."
+      redirect_to merchant_merchant_bulk_discount_path(discount.merchant, discount)
     end
   end
 
