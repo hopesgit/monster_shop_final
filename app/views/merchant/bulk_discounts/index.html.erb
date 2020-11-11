@@ -7,7 +7,7 @@
 <% @discounts.each do |discount| %>
   <section id="bulk-discount-<%= discount.id %>">
     <p>Order <%= discount.item_quantity %> of any item, get <%= discount.percentage %>% off!</p>
-    <p><%= link_to "Edit Discount", edit_merchant_merchant_bulk_discount_path(discount.merchant_id, discount.id) %></p>
+    <p><%= link_to "Edit Discount", edit_merchant_merchant_bulk_discount_path(discount.merchant_id, discount.id) %> <%= button_to "Delete Discount", merchant_merchant_bulk_discount_path(discount.merchant_id, discount.id), method: :delete %></p>
     <p>------</p>
   </section>
 <% end %>

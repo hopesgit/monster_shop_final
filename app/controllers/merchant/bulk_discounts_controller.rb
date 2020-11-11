@@ -38,6 +38,14 @@ class Merchant::BulkDiscountsController < Merchant::BaseController
     end
   end
 
+  def destroy
+    discount = BulkDiscount.find(params[:id])
+    discount.destroy
+    discount.save
+    flash[:warning] = "Discount deleted successfully."
+    redirect_to merchant_merchant_bulk_discounts_path(current_user.merchant_id)
+  end
+
   private
   def discount_params
     params.require(:bulk_discount).permit(:item_quantity, :percentage)
